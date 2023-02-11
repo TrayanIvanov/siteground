@@ -2,7 +2,10 @@
 
 namespace App\Service;
 
-class CheckoutHandler
+use App\Entity\Receipt;
+use App\Entity\ReceiptItem;
+
+class CheckoutHandler implements CheckoutableInterface
 {
     private CalculatableInterface $calculator;
 
@@ -11,25 +14,25 @@ class CheckoutHandler
         $this->calculator = $calculator;
     }
 
-    public function handlePurchase(CalculatableItemsDto $calculatableItemsDto): ReceiptDto
+    public function handlePurchase(CalculatableItemsDto $calculatableItemsDto): Receipt
     {
-        $receiptDto = new ReceiptDto();
+        $receipt = new Receipt();
         $total = 0;
 
         foreach ($calculatableItemsDto->getItems() as $item) {
             $price = $this->calculator->calculate($item);
 
-            $receiptItemDto = new ReceiptItemDto();
-            $receiptItemDto->setProduct($item->getProduct());
-            $receiptItemDto->setQuantity($item->getQuantity());
-            $receiptItemDto->setTotal($price);
+            $receiptItem = new ReceiptItem();
+            $receiptItem->setProduct($item->getProduct());
+            $receiptItem->setQuantity($item->getQuantity());
+            $receiptItem->setTotal($price);
 
-            $receiptDto->addReceiptItem($receiptItemDto);
+            $receipt->addReceiptItem($receiptItem);
 
             $total += $price;
         }
-        $receiptDto->setTotal($total);
+        $receipt->setTotal($total);
 
-        return $receiptDto;
+        return $receipt;
     }
 }
