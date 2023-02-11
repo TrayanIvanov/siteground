@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    container_name: db
+    image: mysql:8
+    environment:
+      - MYSQL_DATABASE=siteground
+      - MYSQL_ROOT_PASSWORD=qwerty
+      - MYSQL_USER=app_user
+      - MYSQL_PASSWORD=qwerty
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    ports:
+      - "3306:3306"
+    restart: always
+  app:
+    container_name: app
+    ports:
+      - "80:80"
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/app/public
+    build:
+      context: ./docker
+    volumes:
+      - .:/var/www/app
+      - ./docker/vhost.conf:/etc/apache2/sites-available/000-default.conf
