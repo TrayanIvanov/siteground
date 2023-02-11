@@ -13,5 +13,32 @@
                 <div class="form-text">Please, provide list of products (example: AABDA)</div>
             </div>
         </div>
+        {% if receipt is not empty %}
+            <div class="row">
+                <div class="col pt-4">
+                    <h4>Receipt</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total price</th>
+                            </tr>
+                        </thead>
+                        {% for receiptItem in receipt.receiptItems %}
+                            <tr>
+                                <td>{{ receiptItem.product.name }}</td>
+                                <td>{{ receiptItem.quantity }}</td>
+                                <td>{{ receiptItem.total }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3"><b>Receipt total: {{ receipt.total }}</b></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

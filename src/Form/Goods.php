@@ -25,4 +25,9 @@ class Goods
     {
         $this->goods = $goods;
     }
+
+    public function getGoodsAsArray(): array
+    {
+        return str_split($this->getGoods());
+    }
 }
