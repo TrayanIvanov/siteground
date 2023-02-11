@@ -6,7 +6,9 @@
     <div class="container">
         <div class="row">
             <div class="col pt-4">
-                <h1>Groceries</h1>
+                <h1>Groceries shop</h1>
+
+                {% include 'catalogue.html.twig' %}
 
                 {{ form(form) }}
 
@@ -36,7 +38,6 @@
                             <td colspan="3"><b>Receipt total: {{ receipt.total }}</b></td>
                         </tr>
                     </table>
-
                 </div>
             </div>
         {% endif %}

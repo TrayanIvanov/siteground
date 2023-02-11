@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Form\Goods;
 use App\Form\Type\GoodsType;
+use App\Repository\ProductRepository;
+use App\Repository\PromotionRepository;
 use App\Service\CalculatableItemsDtoFactory;
 use App\Service\CheckoutHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,15 +17,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class CheckoutController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private ProductRepository $productRepository;
+    private PromotionRepository $promotionRepository;
     private CalculatableItemsDtoFactory $calculatableItemsDtoFactory;
     private CheckoutHandler $checkoutHandler;
 
     public function __construct(
         EntityManagerInterface $entityManager,
+        ProductRepository $productRepository,
+        PromotionRepository $promotionRepository,
         CalculatableItemsDtoFactory $calculatableItemsDtoFactory,
         CheckoutHandler $checkoutHandler
     ) {
         $this->entityManager = $entityManager;
+        $this->productRepository = $productRepository;
+        $this->promotionRepository = $promotionRepository;
         $this->calculatableItemsDtoFactory = $calculatableItemsDtoFactory;
         $this->checkoutHandler = $checkoutHandler;
     }
@@ -32,6 +40,9 @@ class CheckoutController extends AbstractController
     public function show(Request $request): Response
     {
         $receipt = '';
+        $products = $this->productRepository->findAll();
+        $promotions = $this->promotionRepository->findAll();
+
         $form = $this->createForm(GoodsType::class, new Goods);
         $form->handleRequest($request);
 
@@ -43,10 +54,11 @@ class CheckoutController extends AbstractController
             $this->entityManager->flush();
         }
 
-
         return $this->render('checkout.html.twig', [
+            'availableProducts' => $products,
+            'availablePromotions' => $promotions,
             'form' => $form,
-            'receipt' => $receipt
+            'receipt' => $receipt,
         ]);
     }
 }

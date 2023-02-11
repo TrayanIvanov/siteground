@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col pt-4">
+        <h4>Available products</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Product SKU</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+            </tr>
+            </thead>
+            {% for availableProduct in availableProducts %}
+                <tr>
+                    <td>{{ availableProduct.sku }}</td>
+                    <td>{{ availableProduct.name }}</td>
+                    <td>{{ availableProduct.price }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-4">
+        <h4>Available promotions</h4>
+        {% for availablePromotion in availablePromotions %}
+            <p>{{ availablePromotion.quantity }} {{ availablePromotion.product.name }}s(SKU: {{ availablePromotion.product.sku }}) only for {{ availablePromotion.price }}</p>
+        {% endfor %}
+    </div>
+</div>
